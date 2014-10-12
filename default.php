@@ -43,9 +43,16 @@ class MarkdownItexPlugin implements Gdn_IPlugin {
     if (isset($Sender->CurrentComment)) {
       $Comment = $Sender->CurrentComment;
       $Comment->Body = MarkdownItex($Comment->Body);
+    } elseif (isset($Sender->Discussion)) {
+      $Discussion = $Sender->Discussion;
+      $Discussion->Body = MarkdownItex($Discussion->Body);
     }
   }
 
+  // Add MathJaX to header
+  public function Base_Render_Before($Sender) {
+    $Sender->Head->AddScript('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML');
+  }
   // AJAX posting of comments
   public function PostController_BeforeCommentBody_Handler($Sender) {
     $this->DiscussionController_BeforeCommentBody_Handler($Sender);
