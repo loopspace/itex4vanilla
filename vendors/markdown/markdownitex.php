@@ -1,5 +1,4 @@
 <?php
-
 /*
 Extension Name: Markdown+Itex
 Extension Url: http://www.math.ntnu.no/~stacey/HowDidIDoThat/Vanilla/itex
@@ -25,25 +24,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 if (!defined ('APPLICATION')) exit();
 
 define( 'MARKDOWNITEX_VERSION', "0.2" ); # Thu 25 Feb 2010
 
-# Include markdown if we don't already have it
-
-if (!defined('MARKDOWN_VERSION')) include('markdown.php');
-
-# location of public server and cache should be configuration options
-
-if (@include('itextomml.php'))
-  {
-    define('LOCAL_ITEX', true );
-  }
-else
-  {
-    define('LOCAL_ITEX', false );
-  }
+require_once(PATH_LIBRARY.'/vendors/markdown/markdown.php');
+require_once(PATH_PLUGINS.'/MarkdowniTeX/vendors/markdown/itextomml.php');
 
 function MarkdownItex($text) {
 
@@ -223,16 +209,16 @@ class Itex_Parser {
 #
 # Markdown+Itex Parser Class
 #
-
+/*
 class MarkdownItex_Parser extends Markdown_Parser {
 
   var $itexparser;
   var $main_escape_chars_re;
   var $math_escape_chars_re;
 
-  function MarkdownItex_Parser ($Object)
+  function MarkdownItex_Parser ()
   {
-    $this->itexparser = new Itex_Parser($Object);
+    $this->itexparser = new Itex_Parser();
     $this->itexparser->associateMarkdownVars($this);
     $this->span_gamut += array(
 			       "doInlineMath" => -20,
@@ -278,7 +264,7 @@ class MarkdownItex_Parser extends Markdown_Parser {
   }
 
 }
-
+*/
 class MarkdownExtraItex_Parser extends MarkdownExtra_Parser {
 
   var $itexparser;
@@ -333,6 +319,5 @@ class MarkdownExtraItex_Parser extends MarkdownExtra_Parser {
   }
 
 }
-
 
 ?>
