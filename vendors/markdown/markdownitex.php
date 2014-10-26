@@ -61,7 +61,6 @@ function MarkdownItex($text) {
 static $parser;
 if (!isset($parser))
 	  $parser = new MarkdownExtraItex_Parser();
-	$parser->no_markup = true;
 
 	# Transform text using parser.
 	return $parser->transform($text);

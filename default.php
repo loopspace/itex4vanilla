@@ -34,13 +34,14 @@ $PluginInfo['MarkdownItex'] = array(
 );
 $Configuration['EnabledPlugins']['HtmLawed'] = FALSE;
 require_once('vendors'.DS.'markdown'.DS.'markdownitex.php');
+require_once('vendors'.DS.'markdown'.DS.'validator.php');
 
 // We trust Markdown's output, and don't allow direct HTML input
 Gdn::FactoryInstall('HtmlFormatter', 'MarkdownItexHTMLPlugin', __FILE__, Gdn::FactorySingleton);
 
 class MarkdownItexHTMLPlugin extends Gdn_Plugin {
     public function Format($Html) {
-        return $Html;
+        return Validate($Html);
     }
 }
 
