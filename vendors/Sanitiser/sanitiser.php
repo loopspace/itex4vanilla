@@ -1,9 +1,9 @@
 <?php
 
 /*
-Extension Name: XHTMLValidator
-Extension Url: http://www.math.ntnu.no/~stacey/HowDidIDoThat/Vanilla/XHTMLValidator
-Description: Validate and Sanitise XHTML fragments
+Extension Name: HTMLValidator
+Extension Url: http://www.math.ntnu.no/~stacey/HowDidIDoThat/Vanilla/HTMLValidator
+Description: Validate and Sanitise HTML fragments
 Version: 0.1
 Author: Andrew Stacey
 Author Url: http://www.math.ntnu.no/~stacey
@@ -29,17 +29,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //Dictionary
 //require_once('english.php');
 
+require_once('HTML5_loader.php');
+use Masterminds\HTML5;
+
   function Validate($String)
   {
     static $validator;
     if (!isset($validator))
-      $validator = new XHTMLValidator();
-	$String = $validator->parse($String,false);
+      $validator = new HTMLValidator();
+	$String = $validator->parse($String,true);
     return $String;
   }
 
 
-## Global functions to force a string to be valid XHTML text with no markup
+## Global functions to force a string to be valid HTML text with no markup
 # Source:
 # http://www.phpedit.net/snippet/Remove-Invalid-XML-Characters
 
@@ -79,9 +82,9 @@ function safeToDisplay($string)
   return $safe_string;
 }
 
-class XHTMLValidator {
+class HTMLValidator {
 
-  var $VALIDATE = true; // Do we validate?
+  var $VALIDATE = false; // Do we validate?
   var $SANITISE = true; // Do we sanitise?
   var $CORRECT = false; // When sanitising, do we correct or merely delete?
 
@@ -2320,42 +2323,42 @@ class XHTMLValidator {
 
       
   var $svg_elements = array(
-			'svg:a',
-			'svg:animate',
-			'svg:animateColor',
-			'svg:animateMotion',
-			'svg:animateTransform',
-			'svg:circle',
-			'svg:clipPath',
-			'svg:defs',
-			'svg:desc',
-			'svg:ellipse',
-			'svg:font-face',
-			'svg:font-face-name',
-			'svg:font-face-src',
-			'svg:foreignObject',
-			'svg:g',
-			'svg:glyph',
-			'svg:hkern',
-			'svg:linearGradient',
-			'svg:line',
-			'svg:marker',
-			'svg:metadata',
-			'svg:missing-glyph',
-			'svg:mpath',
-			'svg:path',
-			'svg:polygon',
-			'svg:polyline',
-			'svg:radialGradient',
-			'svg:rect',
-			'svg:set',
-			'svg:stop',
-			'svg:svg',
-			'svg:switch',
-			'svg:text',
-			'svg:title',
-			'svg:tspan',
-			'svg:use'
+			'a',
+			'animate',
+			'animateColor',
+			'animateMotion',
+			'animateTransform',
+			'circle',
+			'clipPath',
+			'defs',
+			'desc',
+			'ellipse',
+			'font-face',
+			'font-face-name',
+			'font-face-src',
+			'foreignObject',
+			'g',
+			'glyph',
+			'hkern',
+			'linearGradient',
+			'line',
+			'marker',
+			'metadata',
+			'missing-glyph',
+			'mpath',
+			'path',
+			'polygon',
+			'polyline',
+			'radialGradient',
+			'rect',
+			'set',
+			'stop',
+			'svg',
+			'switch',
+			'text',
+			'title',
+			'tspan',
+			'use'
 			);
 
       
@@ -2859,7 +2862,7 @@ class XHTMLValidator {
 				  'script',
 				  'noscript',
 				  'math',
-				  'svg:svg'
+				  'svg'
 				  );
 
   var $ALLOWED_ELEMENTS;
@@ -2872,11 +2875,7 @@ class XHTMLValidator {
   var $SVG_ATTR_VAL_ALLOWS_REF;
   var $SVG_ALLOW_LOCAL_HREF;
 
-  var $XHTMLhead;
-  var $XHTMLheadpre = '<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "';
-  var $XHTMLheadpost = '/xhtml-math-svg-flat.dtd" >
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-ca">
+  var $HTMLhead = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 <title>Is this valid?</title>
@@ -2885,13 +2884,13 @@ class XHTMLValidator {
 ';
 
 
-  var $XHTMLfoot = '
+  var $HTMLfoot = '
 </div></body>
 </html>';
 
   var $headlines;
 
-  function XHTMLValidator()
+  function HTMLValidator()
   {
 
 if (!is_array($this->ALLOWED_ELEMENTS))
@@ -2913,9 +2912,7 @@ if (!is_array($this->SVG_ATTR_VAL_ALLOWS_REF))
 if (!is_array($this->SVG_ALLOW_LOCAL_HREF))
   $this->SVG_ALLOW_LOCAL_HREF = $this->svg_allow_local_href;
 
-$this->XHTMLhead = $this->XHTMLheadpre . dirname(__FILE__) . $this->XHTMLheadpost;
-
-  $this->headlines = count(explode("\n",$this->XHTMLhead)) - 1;
+  $this->headlines = count(explode("\n",$this->HTMLhead)) - 1;
 
   }
 
@@ -2923,13 +2920,14 @@ $this->XHTMLhead = $this->XHTMLheadpre . dirname(__FILE__) . $this->XHTMLheadpos
 
   function parse($string, $report = false)
 {
-    $dom = new DOMDocument;
+  //    $dom = new DOMDocument;
+    $html5 = new HTML5();
+    $dom = $html5->loadHTML($this->HTMLhead . $string . $this->HTMLfoot);
+    //  libxml_use_internal_errors(true);
 
-  libxml_use_internal_errors(true);
-
-  if (!$dom->loadXML($this->XHTMLhead . $string . $this->XHTMLfoot))
+  if (!$dom)
     {
-      $errors = libxml_get_errors();
+      //$errors = libxml_get_errors();
       return $this->display_errors($errors,$string,'This comment is invalid XML; displaying source.',$report);
     }
   else
@@ -2951,8 +2949,8 @@ $this->XHTMLhead = $this->XHTMLheadpre . dirname(__FILE__) . $this->XHTMLheadpos
       }
     else
       {
-	$errors = libxml_get_errors();
-	return $this->display_errors($errors,$stext,'This comment is invalid XHTML+MathML+SVG; displaying source.',$report);
+	//$errors = libxml_get_errors();
+	return $this->display_errors($errors,$stext,'This comment is invalid HTML5; displaying source.',$report);
       }
   }
 }
