@@ -1,0 +1,3 @@
+[submodule "vendors/Masterminds"]
+	path = vendors/Masterminds
+	url = https://github.com/Masterminds/html5-php.git
