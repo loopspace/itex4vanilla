@@ -1,13 +1,14 @@
 <?php
 
-$path=PATH_PLUGINS . DS . 'Masterminds' . DS;
+$bpath=PATH_PLUGINS . DS . 'MarkdownItex'.DS.'vendors'.DS.'Masterminds'.DS.'src'.DS;
 
-require_once($path.'HTML5.php');
-$path .= 'HTML5' . DS;
-require_once($path.'Elements.php');
-require_once($path.'Entities.php');
-require_once($path.'Exception.php');
-require_once($path.'InstructionProcessor.php');
+require_once($bpath.'HTML5.php');
+$bpath .= 'HTML5' . DS;
+require_once($bpath.'Elements.php');
+require_once($bpath.'Entities.php');
+require_once($bpath.'Exception.php');
+require_once($bpath.'InstructionProcessor.php');
+$path = $bpath . 'Parser' . DS;
 require_once($path.'CharacterReference.php');
 require_once($path.'EventHandler.php');
 require_once($path.'DOMTreeBuilder.php');
@@ -19,6 +20,7 @@ require_once($path.'Scanner.php');
 require_once($path.'Tokenizer.php');
 require_once($path.'TreeBuildingRules.php');
 require_once($path.'UTF8Utils.php');
+$path = $bpath . 'Serializer' . DS;
 require_once($path.'HTML5Entities.php');
 require_once($path.'RulesInterface.php');
 require_once($path.'OutputRules.php');
