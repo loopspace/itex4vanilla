@@ -34,7 +34,7 @@ $PluginInfo['MarkdownItex'] = array(
 );
 $Configuration['EnabledPlugins']['HtmLawed'] = FALSE;
 require_once('vendors'.DS.'markdown'.DS.'markdownitex.php');
-require_once('vendors'.DS.'markdown'.DS.'validator.php');
+require_once('vendors'.DS.'Sanitiser'.DS.'sanitiser.php');
 
 // We trust Markdown's output, and don't allow direct HTML input
 Gdn::FactoryInstall('HtmlFormatter', 'MarkdownItexHTMLPlugin', __FILE__, Gdn::FactorySingleton);
