@@ -69,6 +69,18 @@ class MarkdownItexPlugin implements Gdn_IPlugin {
     if (LOCAL_ITEX) {
       $Sender->Head->AddScript('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML');
     } else {
+      $Sender->Head->AddString(
+			       <<<EOF
+	        <script>
+			MathJax.Hub.Config({
+				tex2jax: {
+			            inlineMath: [['$','$'], ['\\(','\\)']],
+				    displayMath: [['$$','$$'], ['\\[','\\]']],
+				}
+			});
+		</script>
+EOF;
+			       );
       $Sender->Head->AddScript('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
     }
   }
