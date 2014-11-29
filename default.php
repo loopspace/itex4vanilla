@@ -32,17 +32,21 @@ $PluginInfo['MarkdownItex'] = array(
    'AuthorEmail' => 'loopspace@mathforge.org',
    'AuthorUrl' => 'http://loopspace.mathforge.org'
 );
-$Configuration['EnabledPlugins']['HtmLawed'] = FALSE;
 require_once('vendors'.DS.'markdown'.DS.'markdownitex.php');
-require_once('vendors'.DS.'Sanitiser'.DS.'sanitiser.php');
+if (LOCAL_ITEX) {
+  $Configuration['EnabledPlugins']['HtmLawed'] = FALSE;
+  require_once('vendors'.DS.'Sanitiser'.DS.'sanitiser.php');
+}
 
-// We trust Markdown's output, and don't allow direct HTML input
 Gdn::FactoryInstall('HtmlFormatter', 'MarkdownItexHTMLPlugin', __FILE__, Gdn::FactorySingleton);
 
-class MarkdownItexHTMLPlugin extends Gdn_Plugin {
+if (LOCAL_ITEX) {
+
+  class MarkdownItexHTMLPlugin extends Gdn_Plugin {
     public function Format($Html) {
-        return Validate($Html);
+      return Validate($Html);
     }
+  }
 }
 
 class MarkdownItexPlugin implements Gdn_IPlugin {

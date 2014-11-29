@@ -81,10 +81,10 @@ class Itex_Parser {
 
   function Itex_Parser()
   {
-    if (!isset($this->itexfilter))
+    if (LOCAL_ITEX && !isset($this->itexfilter))
       {
-	    $this->itexfilter = new itextomml();
-	  }
+$this->itexfilter = new itextomml();
+}
 
     // Set up the options
 
@@ -197,6 +197,10 @@ class Itex_Parser {
 
   function processItexEqns($block,$itexstr) {
     $itex = $itexstr[1];
+
+    if (!LOCAL_ITEX) {
+      return $itex;
+    }
 
 	if ($block)
 	  {
