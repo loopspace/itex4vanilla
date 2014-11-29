@@ -79,7 +79,7 @@ class MarkdownItexPlugin implements Gdn_IPlugin {
 				}
 			});
 		</script>
-EOF;
+EOF
 			       );
       $Sender->Head->AddScript('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
     }
