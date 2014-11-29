@@ -66,7 +66,11 @@ class MarkdownItexPlugin implements Gdn_IPlugin {
 
   // Add MathJaX to header
   public function Base_Render_Before($Sender) {
-    $Sender->Head->AddScript('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML');
+    if (LOCAL_ITEX) {
+      $Sender->Head->AddScript('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML');
+    } else {
+      $Sender->Head->AddScript('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
+    }
   }
   // AJAX posting of comments
   public function PostController_BeforeCommentBody_Handler($Sender) {
