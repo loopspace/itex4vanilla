@@ -199,20 +199,24 @@ $this->itexfilter = new itextomml();
     $itex = $itexstr[1];
 
     if (!LOCAL_ITEX) {
-      return $itex;
+      if ($block) {
+	$result = '$$' . $itex . '$$';
+      } else {
+	$result = '$' . $itex . '$';
+      }
+    } else {
+      if ($block)
+	{
+	  $result = $this->itexfilter->block_filter($itex);
+	}
+      else
+	{
+	  $result = $this->itexfilter->inline_filter($itex);
+	}
     }
-
-	if ($block)
-	  {
-	    $mathml = $this->itexfilter->block_filter($itex);
-	  }
-	else
-	  {
-	    $mathml = $this->itexfilter->inline_filter($itex);
-	  }
 //	$mathml = preg_replace('/<.?semantics>/','',$mathml);
 //	$mathml = preg_replace('/<annotation.*<\/annotation>/','',$mathml);
-	return $mathml;
+    return $result;
   }
 
 
