@@ -78,6 +78,15 @@ class MarkdownItexPlugin implements Gdn_IPlugin {
 				    displayMath: [['$$','$$'], ['\\[','\\]']],
 				}
 			});
+jQuery(document).ready(function($) {
+
+$(document).on('CommentAdded PreviewLoaded', function() {
+    MathJax.Hub.queue.Push(['Typeset', MathJax.Hub]);
+    window.setTimeout(function(){
+        MathJax.Hub.queue.Push(['Typeset', MathJax.Hub]);
+    }, 100);
+});
+});
 		</script>
 EOF
 			       );
